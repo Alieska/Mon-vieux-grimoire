@@ -4,7 +4,8 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-const Book = require("./models/book");
+const bookRoutes = require(`./routes/bookRoutes`);
+const userRoutes = require(`./routes/userRoutes`)
 
 mongoose.connect(`mongodb+srv://AlbertLeroy:LuctXonAA08eZWBG@monvieuxgrimoire.snuds6m.mongodb.net/?retryWrites=true&w=majority`,
 { useNewUrlParser: true,
@@ -21,39 +22,7 @@ app.use((req, res, next) => {
     next();
   });
 
-app.post(`/api/books`,(req, res, next) => {
-    delete req.body.id;
-    const book = new Book({
-        ...req.body
-    });
-    book.save()
-        .then(() => res.status(201).json({message: "Objet enregistré !"}))
-        .catch(error => res.status(400).json({error}));
-    })
-
-
-app.get(`/api/books`,(req, res, next) => {
-    Book.find()
-    .then(books => res.status(200).json(books))
-    .catch(error => res.status(400).json({error}));      ;
-    });
-
-app.get('/api/books/:id', (req, res, next) => {
-        Book.findOne({ id: req.params.id })
-          .then(book => res.status(200).json(book))
-          .catch(error => res.status(404).json({ error }));
-      });
-
-app.put('/api/books/:id', (req, res, next) => {
-        Book.updateOne({ id: req.params.id }, { ...req.body, id: req.params.id })
-          .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-          .catch(error => res.status(400).json({ error }));
-      });
-
-app.delete('/api/books/:id', (req, res, next) => {
-        Book.deleteOne({ id: req.params.id })
-          .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
-          .catch(error => res.status(400).json({ error }));
-      });
+app.use(`/api/books`, bookRoutes);
+app.use(`/api/auth` , userRoutes);
 
 module.exports = app;
