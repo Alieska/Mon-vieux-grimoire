@@ -50,9 +50,10 @@
 .BookImage {
     width: calc(40% - 80px);
     background-position: center;
-    background-size: cover;
+    background-size:auto;
     margin-right: 80px;
     margin-left: 120px;
+    object-fit: contain;   ;
 }
 .Book img {
     width: 40%;
